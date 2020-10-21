@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  querie:
+    build:
+      context: .
+      dockerfile: "DockerfileQueries"
+    container_name: "queries"
+    depends_on:
+      - etl
+    volumes:
+      - .:/usr/src/app:rw
+    command: ["python3", "queries.py"]
+  etl:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    container_name: "etl"
+    depends_on:
+      db:
+        condition: service_healthy 
+  db:
+    image: postgres
+    volumes:
+      - ./creotablas.sh:/docker-entrypoint-initdb.d/creotablas.sh            
+    container_name: "db"
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 20s
+      retries: 10
