@@ -77,7 +77,7 @@ Nombre: postgres \
 Usuario: postgres \
 Password: postgres 
 
-Asimismo, se expone el puerto 5432 hacia el host.
+Asimismo, se expone el puerto 5432 (puerto default de Postgres) hacia el puerto 5432 del host.
 
 ## Sobre las consultas
 
